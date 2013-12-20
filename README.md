@@ -5,7 +5,7 @@ Simple default data for mongoose models.
 
 ### usage
 
-`mongoose-simple-fixtures` takes a `mongoose` reference, and a path to the `directory` which contains the default data and an err-first callback.  Each filename in the `directory` must correspond to the model name in mongoose.
+`mongoose-simple-fixtures` takes a `mongoose` reference, and a path to the `directory` which contains the default data and an err-first `callback`.  Each filename in the `directory` must correspond to the model name in mongoose.
 
 For example, if you used the directory `fixtures` and it contained two files:
 
