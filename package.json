@@ -1,0 +1,23 @@
+{
+  "name": "mongoose-simple-fixtures",
+  "version": "1.0.0",
+  "description": "Simple default data for mongoose models",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "mongoose",
+    "fixtures",
+    "simple",
+    "prime",
+    "default",
+    "data"
+  ],
+  "author": "John Weis <weis.john@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "mongoose-prime": "1.0.0",
+    "async": "0.2.9"
+  }
+}
