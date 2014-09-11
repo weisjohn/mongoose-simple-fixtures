@@ -9,14 +9,14 @@ Simple default data for mongoose models.
 
 For example, if you used the directory `fixtures` and it contained two files:
 
-```
+```bash
 $ ls fixtures/
 templates.json users.json
 ```
 
 then `mongoose-simple-fixtures` would look for two models on the mongoose reference called `templates` and `users`.  If those models do not exist, the data loading will fail.
 
-```
+```javascript
 // assuming a mongoose connection and models defined above
 var path = require('path')
   , msf = require('mongoose-simple-fixtures')
