@@ -17,7 +17,7 @@
   "author": "John Weis <weis.john@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "mongoose-prime": "1.1.0",
+    "mongoose-prime": "1.2.0",
     "async": "0.9.x"
   }
 }
