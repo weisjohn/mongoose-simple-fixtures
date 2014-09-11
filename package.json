@@ -18,6 +18,6 @@
   "license": "MIT",
   "dependencies": {
     "mongoose-prime": "1.1.0",
-    "async": "0.2.9"
+    "async": "0.9.x"
   }
 }
