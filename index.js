@@ -3,30 +3,47 @@ var fs = require('fs')
   , path = require('path')
   , async = require('async')
   , mp = require('mongoose-prime')
+  , EJSON = require('mongodb-extended-json')
   ;
 
 module.exports = function(mongoose, directory, cb) {
-    var results = [];
 
     fs.readdir(directory, function(err, files) {
         if (err) return cb(err);
-        if (files.length == 0) return cb(null, results);
-        async.each(files, function(file, cb) {
+        async.map(files, processFile, cb);
+    });
 
-            var data = require(path.join(directory, file))
-              , name = file.split('.')[0]
-              , model = mongoose.model(name)
-              ;
+    function processFile(file, cb) {
 
-            mp(model, data, function(err, result) {
-                if (err) return cb(err);
-                result.name = name;
-                results.push(result);
-                cb();
+        var filepath = path.join(directory, file);
+
+        // backward's compatible support for old style require
+        var data;
+        try { data = require(filepath) } catch (e) { }
+        if (data && Array.isArray(data)) return loadData(file, data, cb);
+
+        // read the file line by line as a mongoexport 
+        fs.readFile(filepath, function(err, contents) {
+            var data = [];
+            // process each line of the file
+            contents.toString().split('\n').forEach(function(line) {
+                try { data.push(EJSON.parse(line)); } catch (e) {}
             });
 
-        }, function(err) {
-            cb(null, results);
+            loadData(file, data, cb);
         });
-    });
+    }
+
+    function loadData(file, data, cb) {
+        var name = file.split('.')[0]
+          , model = mongoose.model(name)
+          ;
+
+        mp(model, data, function(err, result) {
+            if (err) return cb(err);
+            result.name = name;
+            cb(null, result);
+        });
+    }
+
 }
