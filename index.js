@@ -8,6 +8,11 @@ var fs = require('fs')
 
 module.exports = function(mongoose, directory, cb) {
 
+    // make cb optional
+    if (typeof cb !== "function") {
+        cb = function() {};
+    }
+
     fs.readdir(directory, function(err, files) {
         if (err) return cb(err);
         async.map(files, processFile, cb);
