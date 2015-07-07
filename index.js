@@ -8,6 +8,18 @@ var fs = require('fs')
 
 module.exports = function(mongoose, directory, cb) {
 
+    // make mongoose instance optional
+    if (typeof mongoose == "string") {
+        cb = directory;
+        directory = mongoose;
+        try {
+            mongoose = require('mongoose');
+        } catch(e) {
+            var prequire = require('parent-require');
+            mongoose = prequire('mongoose');
+        }
+    }
+
     // make cb optional
     if (typeof cb !== "function") {
         cb = function() {};
