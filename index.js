@@ -39,7 +39,7 @@ module.exports = function(mongoose, directory, cb) {
         try { data = require(filepath) } catch (e) { }
         if (data && Array.isArray(data)) return loadData(file, data, cb);
 
-        // read the file line by line as a mongoexport 
+        // read a mongoexport file line by line
         fs.readFile(filepath, function(err, contents) {
             var data = [];
             // process each line of the file
