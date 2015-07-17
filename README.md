@@ -4,7 +4,12 @@ Simple default data for mongoose models.
 
 ### usage
 
-`mongoose-simple-fixtures` takes a `mongoose` reference, and a path to the `directory` which contains the default data and an err-first `callback`.
+#### `msf([mongoose], directory, [validate], [callback])`
+
+ - `mongoose` - optional reference to mongoose
+ - `directory` - the path to the data, i.e. `./fixtures`
+ - `validate` - optional boolean to disable schema validation
+ - `callback` - optional `function(err, results) {}`
 
 ```javascript
 // assuming a mongoose connection and models defined above
