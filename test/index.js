@@ -7,30 +7,64 @@ var files = fs.readdirSync(dir);
 var async = require('async');
 var mongoose = require('mongoose');
 var assert = require('assert');
+var msf = require('../');
+
+// loop through all the files
+function looper(func) {
+    return function(cb) {
+        async.each(files, function(file, cb) {
+            var name = file.split('.')[0];
+            var model = mongoose.model(name);
+            var records = jsonload.sync(dir + file);
+            func(name, model, records, cb);
+        }, cb);
+    }
+}
+
+// process the records
+function processor(func) {
+    return function(name, model, records, cb) {
+        async.each(records, function(record, cb) {
+            var id = record._id.$oid;
+            model.findOne({ _id : id }, function(err, doc) {
+                func(err, doc, name, id, cb);
+            });
+        }, cb);
+    }
+}
+
 
 // reflective test harness
 function test(cb) {
     return function() {
 
-        async.each(files, function(file) {
+        async.series([
 
-            var name = file.split('.')[0];
-            var model = mongoose.model(name);
-            var records = jsonload.sync(dir + file);
+            // models should exist, wipe out records
+            looper(function(name, model, records, cb) {
+                assert.equal(model.modelName, name, name + ' should be a model');
+                model.remove({}, cb);
+            }),
 
-            assert.equal(model.modelName, name, name + ' should be a model');
+            // records should be gone
+            looper(processor(function(err, doc, name, id, cb) {
+                assert.ifError(err, name + ': finding should not fail: ' + id);
+                assert(!doc, name + ': doc should not exist: ' + id);
+                cb();
+            })),
 
-            async.each(records, function(record, cb) {
-                var id = record._id.$oid;
-                model.findOne({ _id : id }, function(err, doc) {
-                    assert.ifError(err, name + ': finding should not fail ' + id);
-                    assert(doc, name + ': doc should exist');
-                    assert.equal(doc._id.toString(), id, name + ': doc id should be' + id);
-                    cb();
-                });
-            }, cb);
+            // load the fixtures
+            function(cb) { msf(dir, cb); },
 
-        }, cb);
+            // records should be loaded
+            looper(processor(function(err, doc, name, id, cb) {
+                assert.ifError(err, name + ': finding should not fail: ' + id);
+                assert(doc, name + ': doc should exist: ' + id);
+                assert.equal(doc._id.toString(), id, name + ': doc id should be' + id);
+                cb();
+            })),
+
+        ], cb);
 
     }
 
