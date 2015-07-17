@@ -13,7 +13,7 @@ var path = require('path')
   , dir = path.resolve(__dirname, "./fixtures")
   ;
 
-msf(mongoose, dir, function(err, results) {
+msf(dir, function(err, results) {
     if (err) console.log("loading data failed");
 });
 ```
