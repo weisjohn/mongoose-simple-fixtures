@@ -6,11 +6,12 @@ var fs = require('fs')
   , EJSON = require('mongodb-extended-json')
   ;
 
-module.exports = function(mongoose, directory, cb) {
+module.exports = function(mongoose, directory, validate, cb) {
 
-    // make mongoose instance optional
+    // mongoose is optional
     if (typeof mongoose == "string") {
-        cb = directory;
+        cb = validate;
+        validate = directory;
         directory = mongoose;
         try {
             mongoose = require('mongoose');
@@ -20,7 +21,13 @@ module.exports = function(mongoose, directory, cb) {
         }
     }
 
-    // make cb optional
+    // validate is optional
+    if (typeof validate == "function") {
+        cb = validate;
+        validate = null;
+    }
+
+    // cb optional
     if (typeof cb !== "function") {
         cb = function() {};
     }
@@ -56,7 +63,7 @@ module.exports = function(mongoose, directory, cb) {
           , model = mongoose.model(name)
           ;
 
-        mp(model, data, function(err, result) {
+        mp(model, data, validate, function(err, result) {
             if (err) return cb(err);
             result.name = name;
             cb(null, result);
