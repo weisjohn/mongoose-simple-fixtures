@@ -34,7 +34,7 @@ module.exports = function(mongoose, directory, cb) {
 
         var filepath = path.join(directory, file);
 
-        // backward's compatible support for old style require
+        // backwards compatible support for old style require
         var data;
         try { data = require(filepath) } catch (e) { }
         if (data && Array.isArray(data)) return loadData(file, data, cb);
