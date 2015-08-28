@@ -34,6 +34,9 @@ module.exports = function(mongoose, directory, validate, cb) {
 
     fs.readdir(directory, function(err, files) {
         if (err) return cb(err);
+        files = files.filter(function(file) {
+            return /\w\.json$/.test(file);
+        });
         async.map(files, processFile, cb);
     });
 
