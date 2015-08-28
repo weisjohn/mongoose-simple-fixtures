@@ -41,7 +41,7 @@ $ ls fixtures/
 templates.json users.json
 ```
 
-then `mongoose-simple-fixtures` would look for two models on the mongoose reference called `templates` and `users`.  If those models do not exist, the data loading will fail.
+then `mongoose-simple-fixtures` would look for two models on the mongoose reference called `templates` and `users`.  If those models do not exist, the data loading will fail. Any files not ending in `.json` are skipped.
 
 
 ### extra
