@@ -60,8 +60,7 @@ module.exports = function(mongoose, directory, validate, cb) {
 
     function loadData(file, data, cb) {
         var name = file.split('.')[0];
-        if (!name) return cb(null);
-        var model = mongoose.model(name)
+        var model = mongoose.model(name);
 
         mp(model, data, validate, function(err, result) {
             if (err) return cb(err);
