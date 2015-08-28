@@ -14,6 +14,7 @@ function looper(func) {
     return function(cb) {
         async.each(files, function(file, cb) {
             var name = file.split('.')[0];
+            if (!name) return cb();
             var model = mongoose.model(name);
             var records = jsonload.sync(dir + file);
             func(name, model, records, cb);
