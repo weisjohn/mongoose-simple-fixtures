@@ -3,6 +3,7 @@ var fs = require('fs')
   , path = require('path')
   , async = require('async')
   , mp = require('mongoose-prime')
+  , jsonload = require('jsonload')
   , EJSON = require('mongodb-extended-json')
   ;
 
@@ -37,29 +38,14 @@ module.exports = function(mongoose, directory, validate, cb) {
         files = files.filter(function(file) {
             return /\w\.json$/.test(file);
         });
-        async.map(files, processFile, cb);
-    });
-
-    function processFile(file, cb) {
-
-        var filepath = path.join(directory, file);
-
-        // backwards compatible support for old style require
-        var data;
-        try { data = require(filepath) } catch (e) { }
-        if (data && Array.isArray(data)) return loadData(file, data, cb);
-
-        // read a mongoexport file line by line
-        fs.readFile(filepath, function(err, contents) {
-            var data = [];
-            // process each line of the file
-            contents.toString().split('\n').forEach(function(line) {
-                try { data.push(EJSON.parse(line)); } catch (e) {}
+        async.map(files, function(file, cb) {
+            var filepath = path.join(directory, file);
+            jsonload(filepath, EJSON, function(err, lines) {
+                if (err) return cb(err);
+                loadData(file, lines, cb);
             });
-
-            loadData(file, data, cb);
-        });
-    }
+        }, cb);
+    });
 
     function loadData(file, data, cb) {
         var name = file.split('.')[0];
