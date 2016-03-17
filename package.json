@@ -1,6 +1,6 @@
 {
   "name": "mongoose-simple-fixtures",
-  "version": "1.9.2",
+  "version": "1.9.3",
   "description": "provide initial data for mongoose models",
   "main": "index.js",
   "scripts": {
@@ -24,7 +24,7 @@
     "async": "0.9.x",
     "jsonload": "^1.1.0",
     "mongodb-extended-json": "1.0.x",
-    "mongoose-prime": "1.8.0"
+    "mongoose-prime": "1.9.0"
   },
   "devDependencies": {
     "mongoose": "^4.0.7",
