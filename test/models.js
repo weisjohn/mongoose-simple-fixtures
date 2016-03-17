@@ -7,6 +7,12 @@ module.exports = function(cb) {
         last_name: String,
     })), 'people');
 
+    // duplicate of `people` model to test single-item load
+    mongoose.model('person', (new mongoose.Schema({
+        first_name: String,
+        last_name: String,
+    })), 'person');
+
     mongoose.model('site', (new mongoose.Schema({
         url: String,
         last_visit: {

@@ -17,6 +17,10 @@ function looper(func) {
             if (!name) return cb();
             var model = mongoose.model(name);
             var records = jsonload.sync(dir + file);
+
+            // wrap non-array records
+            if (!Array.isArray(records)) records = [records];
+
             func(name, model, records, cb);
         }, cb);
     }
